@@ -27,6 +27,7 @@ module Text.Feed.RSS
 where
 
 import Data.Text (Text)
+import Data.These
 import Data.Time.Clock (UTCTime)
 import qualified Data.ByteString.Lazy as BL
 
@@ -67,21 +68,22 @@ data Feed = Feed
     -- ^ Collection of feed items
   } deriving (Eq, Ord, Show, Read)
 
--- | An RSS item
+-- | An RSS item.
 
 data Item = Item
-  {
+  { itemTitleDesc :: These Text Text
+    -- ^ Title, description, or both of them
   } deriving (Eq, Ord, Show, Read)
 
 -- | Information about image to be displayed with channel.
 
 data Image = Image
-  { imageUrl   :: !Text
+  { imageUrl :: !Text
     -- ^ The URL of a GIF, JPEG or PNG image that represents the channel
   , imageTitle :: !Text
     -- ^ Description of the image, will be used as @alt@ attribute when the
     -- image is rendered in HTML
-  , imageLink  :: !Text
+  , imageLink :: !Text
     -- ^ URL of the site, when the image
   , imageWidth :: !(Maybe Int)
     -- ^ Optional width: maximum value is 144, default value is 88
