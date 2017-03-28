@@ -71,8 +71,18 @@ data Feed = Feed
 -- | An RSS item.
 
 data Item = Item
-  { itemTitleDesc :: These Text Text
+  { itemTitleDesc :: !(These Text Text)
     -- ^ Title, description, or both of them
+  , itemLink :: !(Maybe Text)
+    -- ^ The URL of the item
+  , itemAuthor :: !(Maybe Text)
+    -- ^ Email address of the author of the item
+  , itemComments :: !(Maybe Text)
+    -- ^ URL of a page for comments relating to the item
+  , itemGuid :: !(Maybe Text)
+    -- ^ A string that uniquely identifies the item
+  , itemPubDate :: !(Maybe UTCTime)
+    -- ^ Date indicating when the item was published
   } deriving (Eq, Ord, Show, Read)
 
 -- | Information about image to be displayed with channel.
