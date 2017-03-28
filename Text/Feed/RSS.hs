@@ -13,6 +13,7 @@
 --
 -- > import qualified Text.Feed.RSS
 
+{-# LANGUAGE CPP               #-}
 {-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
@@ -34,8 +35,14 @@ import Data.Text (Text)
 import Data.These
 import Data.Time.Clock (UTCTime)
 import Text.Mustache
-import qualified Data.Text.Lazy           as TL
+import qualified Data.Text.Lazy as TL
+
+#if MIN_VERSION_template_haskell(2,11,0)
 import qualified Text.Mustache.Compile.TH as TH
+#else
+import Data.FileEmbed (embedStringFile)
+import Text.Megaparsec (parseErrorPretty)
+#endif
 
 -- | A representation of a RSS feed.
 --
@@ -296,8 +303,14 @@ instance ToJSON Language where
 -- | Render a 'Feed' as a lazy 'TL.Text'.
 
 renderFeed :: Feed -> TL.Text
-renderFeed =
+renderFeed = --
+#if MIN_VERSION_template_haskell(2,11,0)
   renderMustache $(TH.compileMustacheFile "templates/rss.mustache") . toJSON
+#else
+  case compileMustacheText "main" $(embedStringFile "templates/rss.mustache") of
+    Left err -> error (parseErrorPretty err)
+    Right template -> renderMustache template . toJSON
+#endif
 
 ----------------------------------------------------------------------------
 -- Helpers

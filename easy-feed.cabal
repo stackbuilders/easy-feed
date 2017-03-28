@@ -60,7 +60,10 @@ library
   build-depends:      aeson            >= 0.11  && < 1.2
                     , base             >= 4.7   && < 5.0
                     , bytestring       >= 0.10  && < 0.11
+                    , file-embed       >= 0.0.9
+                    , megaparsec       >= 5.0   && < 6.0
                     , stache           >= 0.1.7 && < 0.3
+                    , template-haskell >= 2.10  && < 2.12
                     , text             >= 1.2   && < 1.3
                     , these            >= 0.7   && < 0.8
                     , time             >= 1.4   && < 1.8
