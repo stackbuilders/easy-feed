@@ -33,7 +33,7 @@ where
 import Data.Aeson
 import Data.Text (Text)
 import Data.These
-import Data.Time.Clock (UTCTime)
+import Data.Time
 import Text.Mustache
 import qualified Data.Text.Lazy as TL
 
@@ -419,4 +419,4 @@ getLangId = \case
 -- | Format feed date according to RFC 822.
 
 formatFeedDate :: UTCTime -> String
-formatFeedDate = undefined -- TODO
+formatFeedDate = formatTime defaultTimeLocale "%a, %d %b %0Y %X GMT"
