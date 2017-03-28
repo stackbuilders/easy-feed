@@ -16,20 +16,26 @@
 {-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE TemplateHaskell   #-}
 
 module Text.Feed.RSS
   ( -- * Types
     Feed (..)
+  , mkFeed
   , Item (..)
+  , mkItem
   , Image (..)
     -- * Feed rendering
   , renderFeed )
 where
 
+import Data.Aeson
 import Data.Text (Text)
 import Data.These
 import Data.Time.Clock (UTCTime)
-import qualified Data.ByteString.Lazy as BL
+import Text.Mustache
+import qualified Data.Text.Lazy           as TL
+import qualified Text.Mustache.Compile.TH as TH
 
 -- | A representation of a RSS feed.
 --
@@ -68,6 +74,47 @@ data Feed = Feed
     -- ^ Collection of feed items
   } deriving (Eq, Ord, Show, Read)
 
+-- | The helper takes only required feed parameters: title, link, and
+-- description and sets everything else to 'Nothing' and @[]@.
+
+mkFeed
+  :: Text              -- ^ Title
+  -> Text              -- ^ Link
+  -> Text              -- ^ Description
+  -> Feed
+mkFeed title link desc = Feed
+  { feedTitle          = title
+  , feedLink           = link
+  , feedDescription    = desc
+  , feedLanguage       = Just Russian
+  , feedCopyright      = Nothing
+  , feedManagingEditor = Nothing
+  , feedWebMaster      = Nothing
+  , feedPubDate        = Nothing
+  , feedLastBuildDate  = Nothing
+  , feedCategory       = []
+  , feedDocs           = Nothing
+  , feedTimeToLive     = Nothing
+  , feedImage          = Nothing
+  , feedItems          = [] }
+
+instance ToJSON Feed where
+  toJSON Feed {..} = object
+    [ "title"          .= feedTitle
+    , "link"           .= feedLink
+    , "description"    .= feedDescription
+    , "language"       .= feedLanguage
+    , "copyright"      .= feedCopyright
+    , "managingEditor" .= feedManagingEditor
+    , "webMaster"      .= feedWebMaster
+    , "pubDate"        .= (formatFeedDate <$> feedPubDate)
+    , "lastBuildDate"  .= (formatFeedDate <$> feedLastBuildDate)
+    , "category"       .= feedCategory
+    , "docs"           .= feedDocs
+    , "timeToLive"     .= feedTimeToLive
+    , "image"          .= feedImage
+    , "items"          .= feedItems ]
+
 -- | An RSS item.
 
 data Item = Item
@@ -77,6 +124,8 @@ data Item = Item
     -- ^ The URL of the item
   , itemAuthor :: !(Maybe Text)
     -- ^ Email address of the author of the item
+  , itemCategory :: ![Text]
+    -- ^ Collection of categories the item belongs to
   , itemComments :: !(Maybe Text)
     -- ^ URL of a page for comments relating to the item
   , itemGuid :: !(Maybe Text)
@@ -84,6 +133,35 @@ data Item = Item
   , itemPubDate :: !(Maybe UTCTime)
     -- ^ Date indicating when the item was published
   } deriving (Eq, Ord, Show, Read)
+
+-- | The helper takes only required parameters: title or description or
+-- both and create an 'Item'.
+
+mkItem :: These Text Text -> Item
+mkItem titleDesc = Item
+  { itemTitleDesc = titleDesc
+  , itemLink      = Nothing
+  , itemAuthor    = Nothing
+  , itemCategory  = []
+  , itemComments  = Nothing
+  , itemGuid      = Nothing
+  , itemPubDate   = Nothing }
+
+instance ToJSON Item where
+  toJSON Item {..} = object
+    [ "title"    .= itemTitle
+    , "desc"     .= itemDesc
+    , "author"   .= itemAuthor
+    , "category" .= itemCategory
+    , "comments" .= itemComments
+    , "guid"     .= itemGuid
+    , "pubDate"  .= (formatFeedDate <$> itemPubDate) ]
+    where
+      (itemTitle, itemDesc) =
+        case itemTitleDesc of
+          This title -> (Just title, Nothing)
+          That desc  -> (Nothing, Just desc)
+          These title desc -> (Just title, Just desc)
 
 -- | Information about image to be displayed with channel.
 
@@ -97,9 +175,17 @@ data Image = Image
     -- ^ URL of the site, when the image
   , imageWidth :: !(Maybe Int)
     -- ^ Optional width: maximum value is 144, default value is 88
-  , imageHeigh :: !(Maybe Int)
+  , imageHeight :: !(Maybe Int)
     -- ^ Optional height: maximum height is 400, default value is 31
   } deriving (Eq, Ord, Show, Read)
+
+instance ToJSON Image where
+  toJSON Image {..} = object
+    [ "url"    .= imageUrl
+    , "title"  .= imageTitle
+    , "link"   .= imageLink
+    , "width"  .= imageWidth
+    , "height" .= imageHeight ]
 
 -- | Enumeration of languages.
 --
@@ -204,10 +290,14 @@ data Language
   | Ukrainian
   deriving (Eq, Ord, Bounded, Enum, Show, Read)
 
--- | Render a 'RSSFeed' as a lazy 'BL.ByteString'.
+instance ToJSON Language where
+  toJSON = String . getLangId
 
-renderFeed :: Feed -> BL.ByteString
-renderFeed = undefined
+-- | Render a 'Feed' as a lazy 'TL.Text'.
+
+renderFeed :: Feed -> TL.Text
+renderFeed =
+  renderMustache $(TH.compileMustacheFile "templates/rss.mustache") . toJSON
 
 ----------------------------------------------------------------------------
 -- Helpers
@@ -312,3 +402,8 @@ getLangId = \case
   SwedishSweden      -> "sv-se"
   Turkish            -> "tr"
   Ukrainian          -> "uk"
+
+-- | Format feed date according to RFC 822.
+
+formatFeedDate :: UTCTime -> String
+formatFeedDate = undefined -- TODO

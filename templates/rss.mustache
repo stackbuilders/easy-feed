@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>{{ title }}</title>
+    <link>{{ link }}</link>
+    <description>{{ description }}</description>
+    {{# language }}
+    <language>{{ . }}</language>
+    {{/ language }}
+    {{# copyright }}
+    <copyright>{{ . }}</copyright>
+    {{/ copyright }}
+    {{# managingEditor }}
+    <managingEditor>{{ . }}</managingEditor>
+    {{/ managingEditor }}
+    {{# webMaster }}
+    <webMaster>{{ . }}</webMaster>
+    {{/ webMaster }}
+    {{# pubDate }}
+    <pubDate>{{ . }}</pubDate>
+    {{/ pubDate }}
+    {{# lastBuildDate }}
+    <lastBuildDate>{{ . }}</lastBuildDate>
+    {{/ lastBuildDate }}
+    {{# category }}
+    <category>{{ . }}</category>
+    {{/ category }}
+    {{# docs }}
+    <docs>{{ . }}</docs>
+    {{/ docs }}
+    {{# timeToLive }}
+    <ttl>{{ . }}</ttl>
+    {{/ timeToLive }}
+    {{# image }}
+    <image>
+      <url>{{ url }}</url>
+      <title>{{ title }}</title>
+      <link>{{ link }}</link>
+      {{# width }}
+      <width>{{ . }}</width>
+      {{/ width }}
+      {{# height }}
+      <height>{{ . }}</height>
+      {{/ height }}
+    </image>
+    {{/ image }}
+  </channel>
+  {{# item }}
+  <item>
+    {{# title }}
+    <title>{{ . }}</title>
+    {{/ title }}
+    {{# desc }}
+    <description>{{ . }}</description>
+    {{/ desc }}
+    {{# author }}
+    <author>{{ . }}</author>
+    {{/ author }}
+    {{# category }}
+    <category>{{ . }}</category>
+    {{/ category }}
+    {{# comments }}
+    <comments>{{ . }}</comments>
+    {{/ comments }}
+    {{# guid }}
+    <guid>{{ . }}</guid>
+    {{/ guid }}
+    {{# pubDate }}
+    <pubDate>{{ . }}</pubDate>
+    {{/ pubDate }}
+  </item>
+  {{/ item }}
+</rss>
