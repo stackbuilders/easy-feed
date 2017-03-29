@@ -11,7 +11,7 @@
 --
 -- This module is intended to be imported qualified:
 --
--- > import qualified Text.Feed.RSS
+-- > import qualified Text.Feed.RSS as RSS
 
 {-# LANGUAGE CPP               #-}
 {-# LANGUAGE LambdaCase        #-}
@@ -93,7 +93,7 @@ mkFeed title link desc = Feed
   { feedTitle          = title
   , feedLink           = link
   , feedDescription    = desc
-  , feedLanguage       = Just Russian
+  , feedLanguage       = Nothing
   , feedCopyright      = Nothing
   , feedManagingEditor = Nothing
   , feedWebMaster      = Nothing
@@ -303,7 +303,7 @@ instance ToJSON Language where
 -- | Render a 'Feed' as a lazy 'TL.Text'.
 
 renderFeed :: Feed -> TL.Text
-renderFeed = --
+renderFeed =
 #if MIN_VERSION_template_haskell(2,11,0)
   renderMustache $(TH.compileMustacheFile "templates/rss.mustache") . toJSON
 #else
