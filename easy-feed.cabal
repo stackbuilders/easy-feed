@@ -68,6 +68,7 @@ library
                     , these            >= 0.7   && < 0.8
                     , time             >= 1.4   && < 1.8
   exposed-modules:    Text.Feed.RSS
+                    , Text.Feed.Atom
   if flag(dev)
     ghc-options:      -Wall -Werror
   else
