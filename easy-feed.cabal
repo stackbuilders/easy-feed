@@ -82,6 +82,7 @@ test-suite tests
   build-depends:      base             >= 4.7 && < 5.0
                     , easy-feed        >= 0.1.0
                     , hspec            >= 2.0 && < 3.0
+                    , these            >= 0.7 && < 0.8
   other-modules:      Text.Feed.RSSSpec
   if flag(dev)
     ghc-options:      -Wall -Werror

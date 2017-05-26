@@ -26,6 +26,7 @@ module Text.Feed.RSS
   , Item (..)
   , mkItem
   , Image (..)
+  , Language (..)
     -- * Feed rendering
   , renderFeed )
 where
