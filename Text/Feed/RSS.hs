@@ -120,7 +120,7 @@ instance ToJSON Feed where
     , "docs"           .= feedDocs
     , "timeToLive"     .= feedTimeToLive
     , "image"          .= feedImage
-    , "items"          .= feedItems ]
+    , "item"          .= feedItems ]
 
 -- | An RSS item.
 
