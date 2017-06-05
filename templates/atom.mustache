@@ -1,143 +1,15 @@
-<!--{{# author }}
-<author>
-  <authorName>{{ . }}</authorName>
-
-  {{# authorUri }}
-  <authorUri>{{ . }}</authorUri>
-  {{/ authorUri }}
-
-  {{# authorEmail }}
-  <authorEmail>{{ . }}</authorEmail>
-  {{/ authorEmail }}
-</author>
-{{/ author }}-->
-
-
-
-
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
+  <title {{# titleType }}type="{{ titleType }}"{{/ titleType }}>{{ title }}</title>
   {{# author }}
   <author>
-    <name>{{ . }}</name>
-
-    {{# uri }}
-    <uri>{{ . }}</uri>
-    {{/ uri }}
-
+    <name>{{ name }}</name>
     {{# email }}
     <email>{{ . }}</email>
     {{/ email }}
-  </author>
-  {{/ author }}
-
-  {{# category }}
-  <category>
-    <term>{{ term }}</term>
-    {{# scheme }}
-    <scheme>{{ . }}</scheme>
-    {{/ scheme }}
-    {{# label }}
-    <label>{{ . }}</label>
-    {{/ label }}
-  </category>
-  {{/ category }}
-
-  {{# contributor }}
-  <contributor>
-    <name>{{ . }}</name>
-
     {{# uri }}
     <uri>{{ . }}</uri>
     {{/ uri }}
-
-    {{# email }}
-    <email>{{ . }}</email>
-    {{/ email }}
-  </contributor>
-  {{/ contributor }}
-
-  {{# generator }}
-  <generator>
-    {{# uri }}
-    <uri>{{ . }}<uri>
-    {{/ uri }}
-
-    {{# version }}
-    <version>{{ . }}</version>
-    {{/ version }}
-  <generator>
-  {{/ generator }}
-
-  {{# icon }}
-  <icon>
-    <uri>{{ . }}</uri>
-  </icon>
-  {{/ icon }}
-
-  <id>
-    <uri>{{ . }}</uri>
-  </id>
-
-  {{# link }}
-  <link>
-    <href>{{ . }}</href>
-
-    {{# rel }}
-    <rel>{{ . }}</rel>
-    {{/ rel }}
-
-    
-  </link>
-  {{/ link }}
-
-</feed>
-
-
-
-
-
-
-
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ title }}</title>
-
-  {{# subtitle }}
-  <subtitle>{{ . }}</subtitle>
-  {{/ subtitle }}
-
-  {{# link }}
-  <link>{{ . }}</link>
-  {{/ link }}
-
-  <id>{{ id }}</id>
-  
-  <updated>{{ updated }}</updated>
-  
-  {{# author }}
-  <author>
-    <authorName>{{ . }}</authorName>
-
-    {{# authorUri }}
-    <authorUri>{{ . }}</authorUri>
-    {{/ authorUri }}
-
-    {{# authorEmail }}
-    <authorEmail>{{ . }}</authorEmail>
-    {{/ authorEmail }}
   </author>
   {{/ author }}
-
-  {{# category }}
-  <category>
-    <term>{{ term }}</term>
-    {{# scheme }}
-    <scheme>{{ . }}</scheme>
-    {{/ scheme }}
-    {{# label }}
-    <label>{{ . }}</label>
-    {{/ label }}
-  </category>
-  {{/ category }}
 </feed>
