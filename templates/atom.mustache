@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title {{# titleType }}type="{{ titleType }}"{{/ titleType }}>{{ title }}</title>
+  {{# author }}
+  <author>
+    <name>{{ name }}</name>
+    {{# email }}
+    <email>{{ . }}</email>
+    {{/ email }}
+    {{# uri }}
+    <uri>{{ . }}</uri>
+    {{/ uri }}
+  </author>
+  {{/ author }}
+  {{# category }}
+  <category>
+    <term>{{ term }}</term>
+    {{# scheme }}
+    <scheme>{{ . }}</scheme>
+    {{/ scheme }}
+    {{# label }}
+    <label>{{ . }}</label>
+    {{/ label }}
+  </category>
+  {{/ category }}
+</feed>
