@@ -21,7 +21,8 @@
 
 module Text.Feed.Atom
   ( -- * Types
-    Feed (..)
+    Category (..)
+  , Feed (..)
   , Person (..)
   , TypeAttribute (..)
     -- * Feed rendering
@@ -51,13 +52,15 @@ data Feed = Feed
     -- ^ The feed title type (Text, Html or XHtml)
   , feedAuthors :: ![Person]
     -- The feed authors
+  , feedCategories :: ![Category]
   } deriving (Eq, Ord, Show, Read)
 
 instance ToJSON Feed where
   toJSON Feed {..} = object
     [ "title" .= feedTitle
     , "titleType" .= feedTitleType
-    , "author" .= feedAuthors ]
+    , "author" .= feedAuthors
+    , "category" .= feedCategories ]
 
 -- | An enumeration for the Type attribute on Text constructs
 
@@ -83,6 +86,21 @@ instance ToJSON Person where
     [ "name"  .= personName
     , "email" .= personEmail
     , "uri"   .= personUri
+    ]
+
+-- | The category of the element
+
+data Category = Category
+  { categoryTerm   :: !Text
+  , categoryScheme :: !(Maybe Text)
+  , categoryLabel  :: !(Maybe Text)
+  } deriving (Eq, Ord, Show, Read)
+
+instance ToJSON Category where
+  toJSON Category {..} = object
+    [ "term"   .= categoryTerm
+    , "scheme" .= categoryScheme
+    , "label"  .= categoryLabel
     ]
 
 -- | Render a 'Feed' as a lazy 'TL.Text'.

@@ -12,4 +12,15 @@
     {{/ uri }}
   </author>
   {{/ author }}
+  {{# category }}
+  <category>
+    <term>{{ term }}</term>
+    {{# scheme }}
+    <scheme>{{ . }}</scheme>
+    {{/ scheme }}
+    {{# label }}
+    <label>{{ . }}</label>
+    {{/ label }}
+  </category>
+  {{/ category }}
 </feed>
