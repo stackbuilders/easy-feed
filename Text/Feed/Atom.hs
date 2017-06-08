@@ -23,6 +23,7 @@ module Text.Feed.Atom
   ( -- * Types
     Category (..)
   , Feed (..)
+  , Generator (..)
   , Person (..)
   , TypeAttribute (..)
     -- * Feed rendering
@@ -51,8 +52,13 @@ data Feed = Feed
   , feedTitleType :: !(Maybe TypeAttribute)
     -- ^ The feed title type (Text, Html or XHtml)
   , feedAuthors :: ![Person]
-    -- The feed authors
+    -- ^ The feed authors
   , feedCategories :: ![Category]
+    -- ^ The list of categories
+  , feedContributors :: ![Person]
+    -- ^ The feed contributors (a Person construct like the Authors)
+  , feedGenerator :: !(Maybe Generator)
+    -- ^ The feed generator
   } deriving (Eq, Ord, Show, Read)
 
 instance ToJSON Feed where
@@ -60,7 +66,9 @@ instance ToJSON Feed where
     [ "title" .= feedTitle
     , "titleType" .= feedTitleType
     , "author" .= feedAuthors
-    , "category" .= feedCategories ]
+    , "category" .= feedCategories
+    , "contributor" .= feedContributors
+    , "generator" .= feedGenerator ]
 
 -- | An enumeration for the Type attribute on Text constructs
 
@@ -101,6 +109,20 @@ instance ToJSON Category where
     [ "term"   .= categoryTerm
     , "scheme" .= categoryScheme
     , "label"  .= categoryLabel
+    ]
+
+-- | The generator of the Feed or Atom
+data Generator = Generator
+  { generatorUri     :: !(Maybe Text)
+  , generatorVersion :: !(Maybe Text)
+  , generatorText    :: !Text
+  } deriving (Eq, Ord, Show, Read)
+
+instance ToJSON Generator where
+  toJSON Generator {..} = object
+    [ "uri"     .= generatorUri
+    , "version" .= generatorVersion
+    , "text"    .= generatorText
     ]
 
 -- | Render a 'Feed' as a lazy 'TL.Text'.

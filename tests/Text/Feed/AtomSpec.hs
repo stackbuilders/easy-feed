@@ -24,12 +24,14 @@ testingAtomFeed =
   Atom.Feed
     { Atom.feedTitle = "Test title"
     , Atom.feedTitleType = Just Atom.TextType
-    , Atom.feedAuthors = [testingAuthor "-1", testingAuthor "-2"]
+    , Atom.feedAuthors = [testingPerson "-au1", testingPerson "-au2"]
     , Atom.feedCategories = [testingCategory "-a", testingCategory "-b"]
+    , Atom.feedContributors = [testingPerson "-co1", testingPerson "-co2"]
+    , Atom.feedGenerator = Just (Atom.Generator (Just "genUri") (Just "ver1.1") "gen text")
     }
 
-testingAuthor :: Text -> Atom.Person
-testingAuthor suffix =
+testingPerson :: Text -> Atom.Person
+testingPerson suffix =
   Atom.Person
     { Atom.personName = "Some Guy" <> suffix
     , Atom.personEmail = Just ("someguy@some.guy" <> suffix)

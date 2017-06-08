@@ -23,4 +23,20 @@
     {{/ label }}
   </category>
   {{/ category }}
+  {{# contributor }}
+  <contributor>
+    <name>{{ name }}</name>
+    {{# email }}
+    <email>{{ . }}</email>
+    {{/ email }}
+    {{# uri }}
+    <uri>{{ . }}</uri>
+    {{/ uri }}
+  </contributor>
+  {{/ contributor }}
+  {{# generator }}
+  <generator {{# uri }}uri="{{ uri }}"{{/ uri }} {{# version }}version="{{ version }}"{{/ version }}>
+    {{ text }}
+  </generator>
+  {{/ generator }}
 </feed>
