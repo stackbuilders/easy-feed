@@ -24,6 +24,8 @@ module Text.Feed.Atom
     Category (..)
   , Feed (..)
   , Generator (..)
+  , Icon (..)
+  , Link (..)
   , Person (..)
   , TypeAttribute (..)
     -- * Feed rendering
@@ -59,6 +61,11 @@ data Feed = Feed
     -- ^ The feed contributors (a Person construct like the Authors)
   , feedGenerator :: !(Maybe Generator)
     -- ^ The feed generator
+  , feedIcon :: !(Maybe Icon)
+    -- ^ The feed icon URI
+  , feedId :: !Text
+    -- ^ The feed identifier
+  , feedLinks :: ![Link]
   } deriving (Eq, Ord, Show, Read)
 
 instance ToJSON Feed where
@@ -68,7 +75,10 @@ instance ToJSON Feed where
     , "author" .= feedAuthors
     , "category" .= feedCategories
     , "contributor" .= feedContributors
-    , "generator" .= feedGenerator ]
+    , "generator" .= feedGenerator
+    , "icon" .= feedIcon
+    , "id" .= feedId
+    , "link" .= feedLinks ]
 
 -- | An enumeration for the Type attribute on Text constructs
 
@@ -123,6 +133,34 @@ instance ToJSON Generator where
     [ "uri"     .= generatorUri
     , "version" .= generatorVersion
     , "text"    .= generatorText
+    ]
+
+-- | The icon uri
+newtype Icon = Icon
+  { unIcon :: Text }
+  deriving(Eq, Ord, Show, Read)
+
+instance ToJSON Icon where
+  toJSON (Icon uri) = String uri
+
+-- | The feed link reference
+data Link = Link
+  { linkHref     :: !Text
+  , linkRel      :: !(Maybe Text)
+  , linkType     :: !(Maybe Text)
+  , linkHrefLang :: !(Maybe Text)
+  , linkTitle    :: !(Maybe Text)
+  , linkLength   :: !(Maybe Text)
+  } deriving(Eq, Ord, Show, Read)
+
+instance ToJSON Link where
+  toJSON Link {..} = object
+    [ "href"     .= linkHref
+    , "rel"      .= linkRel
+    , "type"     .= linkType
+    , "hreflang" .= linkHrefLang
+    , "title"    .= linkTitle
+    , "length"   .= linkLength
     ]
 
 -- | Render a 'Feed' as a lazy 'TL.Text'.

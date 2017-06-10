@@ -35,8 +35,20 @@
   </contributor>
   {{/ contributor }}
   {{# generator }}
-  <generator {{# uri }}uri="{{ uri }}"{{/ uri }} {{# version }}version="{{ version }}"{{/ version }}>
+  <generator{{# uri }} uri="{{ uri }}"{{/ uri }}{{# version }} version="{{ version }}"{{/ version }}>
     {{ text }}
   </generator>
   {{/ generator }}
+  {{# icon }}
+  <icon>{{ . }}</icon>
+  {{/ icon }}
+  <id>{{ id }}</id>
+  {{# link }}
+  <link href="{{ href }}"{{# rel }}
+   rel="{{ . }}"{{/ rel }}{{# type }}
+   type="{{ . }}"{{/ type }}{{# hreflang }}
+   hreflang="{{ . }}"{{/ hreflang }}{{# title }}
+   title="{{ . }}"{{/ title }}{{# length }}
+   length="{{ . }}"{{/ length }}/>
+  {{/ link }}
 </feed>

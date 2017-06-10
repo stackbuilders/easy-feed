@@ -28,6 +28,9 @@ testingAtomFeed =
     , Atom.feedCategories = [testingCategory "-a", testingCategory "-b"]
     , Atom.feedContributors = [testingPerson "-co1", testingPerson "-co2"]
     , Atom.feedGenerator = Just (Atom.Generator (Just "genUri") (Just "ver1.1") "gen text")
+    , Atom.feedIcon = Just (Atom.Icon "someiconUri")
+    , Atom.feedId = "someFeedId"
+    , Atom.feedLinks = [testingLink "1", testingLink "2"]
     }
 
 testingPerson :: Text -> Atom.Person
@@ -44,4 +47,15 @@ testingCategory suffix =
     { Atom.categoryTerm = "catTerm" <> suffix
     , Atom.categoryScheme = Just ("catScheme" <> suffix)
     , Atom.categoryLabel = Just ("catLabel" <> suffix)
+    }
+
+testingLink :: Text -> Atom.Link
+testingLink suffix =
+  Atom.Link
+    { Atom.linkHref = "linkhref" <> suffix
+    , Atom.linkRel = Just ("linkrel" <> suffix)
+    , Atom.linkType = Just ("linktype" <> suffix)
+    , Atom.linkHrefLang = Just ("linkhreflang" <> suffix)
+    , Atom.linkTitle = Just ("linktitle" <> suffix)
+    , Atom.linkLength = Just ("linklength" <> suffix)
     }
