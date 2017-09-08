@@ -6,6 +6,7 @@ where
 
 import Data.Monoid ((<>))
 import Data.Text (Text)
+import Data.Time.Clock
 import Test.Hspec
 
 import qualified Text.Feed.Atom as Atom
@@ -23,7 +24,6 @@ testingAtomFeed :: Atom.Feed
 testingAtomFeed =
   Atom.Feed
     { Atom.feedTitle = "Test title"
-    , Atom.feedTitleType = Just Atom.TextType
     , Atom.feedAuthors = [testingPerson "-au1", testingPerson "-au2"]
     , Atom.feedCategories = [testingCategory "-a", testingCategory "-b"]
     , Atom.feedContributors = [testingPerson "-co1", testingPerson "-co2"]
@@ -31,6 +31,10 @@ testingAtomFeed =
     , Atom.feedIcon = Just (Atom.Icon "someiconUri")
     , Atom.feedId = "someFeedId"
     , Atom.feedLinks = [testingLink "1", testingLink "2"]
+    , Atom.feedLogo = Just (Atom.Logo "someLogoUri")
+    , Atom.feedRights = Just "someFeedRights"
+    , Atom.feedSubtitle = Just "someFeedSubtitle" 
+    , Atom.feedUpdated = Just(read "2011-11-19 18:28:52.607875 UTC"::UTCTime) -- Just(Atom.DateConstruct (utctDay $ fromGregorian 2017 6 10) Nothing)
     }
 
 testingPerson :: Text -> Atom.Person

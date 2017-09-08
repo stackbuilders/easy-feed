@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title {{# titleType }}type="{{ titleType }}"{{/ titleType }}>{{ title }}</title>
+  <title>{{ title }}</title>
   {{# author }}
   <author>
     <name>{{ name }}</name>
@@ -51,4 +51,16 @@
    title="{{ . }}"{{/ title }}{{# length }}
    length="{{ . }}"{{/ length }}/>
   {{/ link }}
+  {{# logo }}
+  <logo>{{ . }}</logo>
+  {{/ logo }}
+  {{# rights }}
+  <rights>{{ . }}</rights>
+  {{/ rights }}
+  {{# subtitle }}
+  <subtitle>{{ . }}</subtitle>
+  {{/ subtitle }}
+  {{# updated }}
+  <updated>{{ . }}</updated>
+  {{/ updated }}
 </feed>

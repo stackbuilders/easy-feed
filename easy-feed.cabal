@@ -83,6 +83,7 @@ test-suite tests
                     , easy-feed        >= 0.1.0
                     , hspec            >= 2.0 && < 3.0
                     , text             >= 1.2 && < 1.3
+                    , time             >= 1.4 && < 1.8
                     , these            >= 0.7 && < 0.8
   other-modules:      Text.Feed.RSSSpec
                     , Text.Feed.AtomSpec

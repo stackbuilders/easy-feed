@@ -26,6 +26,7 @@ module Text.Feed.Atom
   , Generator (..)
   , Icon (..)
   , Link (..)
+  , Logo (..)
   , Person (..)
   , TypeAttribute (..)
     -- * Feed rendering
@@ -34,6 +35,7 @@ where
 
 import Data.Aeson
 import Data.Text (Text)
+import Data.Time
 import Text.Mustache
 import qualified Data.Text.Lazy as TL
 
@@ -51,8 +53,6 @@ import Text.Megaparsec (parseErrorPretty)
 data Feed = Feed
   { feedTitle :: !Text
     -- ^ The name of the channel
-  , feedTitleType :: !(Maybe TypeAttribute)
-    -- ^ The feed title type (Text, Html or XHtml)
   , feedAuthors :: ![Person]
     -- ^ The feed authors
   , feedCategories :: ![Category]
@@ -66,19 +66,30 @@ data Feed = Feed
   , feedId :: !Text
     -- ^ The feed identifier
   , feedLinks :: ![Link]
-  } deriving (Eq, Ord, Show, Read)
+    -- ^ The feed links
+  , feedLogo :: !(Maybe Logo)
+    -- ^ The feed logo
+  , feedRights :: !(Maybe Text)
+    -- ^ The feed rights
+  , feedSubtitle :: !(Maybe Text)
+    -- ^ The feed subtitle
+  , feedUpdated :: !(Maybe UTCTime)
+  } deriving (Eq, Ord, Show)
 
 instance ToJSON Feed where
   toJSON Feed {..} = object
     [ "title" .= feedTitle
-    , "titleType" .= feedTitleType
     , "author" .= feedAuthors
     , "category" .= feedCategories
     , "contributor" .= feedContributors
     , "generator" .= feedGenerator
     , "icon" .= feedIcon
     , "id" .= feedId
-    , "link" .= feedLinks ]
+    , "link" .= feedLinks
+    , "logo" .= feedLogo
+    , "rights" .= feedRights
+    , "subtitle" .= feedSubtitle
+    , "updated" .= (formatFeedDate <$> feedUpdated) ]
 
 -- | An enumeration for the Type attribute on Text constructs
 
@@ -163,6 +174,24 @@ instance ToJSON Link where
     , "length"   .= linkLength
     ]
 
+-- | The Logo element
+newtype Logo = Logo
+  { unLogo :: Text }
+  deriving(Eq, Ord, Show, Read)
+
+instance ToJSON Logo where
+  toJSON (Logo uri) = String uri
+
+-- -- | A date construct with optional locale
+-- data DateConstruct = DateConstruct
+--   { dateTime :: !UTCTime
+--   , dateLocale :: !(Maybe TimeLocale)
+--   } deriving(Eq, Ord, Show)
+
+-- instance ToJSON DateConstruct where
+--   toJSON DateConstruct {..} =
+--     String $ pack $ formatFeedDate dateLocale dateTime
+
 -- | Render a 'Feed' as a lazy 'TL.Text'.
 
 renderFeed :: Feed -> TL.Text
@@ -185,3 +214,7 @@ getTypeAttributeText = \case
   TextType  -> "text"
   HtmlType  -> "html"
   XHtmlType -> "xhtml"
+
+formatFeedDate :: UTCTime -> String
+formatFeedDate =
+  formatTime defaultTimeLocale (iso8601DateFormat (Just "%T%Q"))
